@@ -7,6 +7,7 @@ STAGES = (
     ("tiers", "累进抽成", "m4_tiers"),
     ("refunds", "退单回冲", "m5_refunds"),
     ("reconcile", "租金勾稽", "m6_reconcile"),
+    ("exit", "退租清算", "m8_exit"),
     ("publish", "结算复核", "m7_publish"),
 )
 

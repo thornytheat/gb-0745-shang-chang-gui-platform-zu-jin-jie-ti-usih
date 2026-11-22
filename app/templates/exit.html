@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% from "ledger.jinja" import register %}
+{% macro sheet(title, rows, amounts=()) %}
+<section class="panel ledger-panel">
+  <div class="panel-head"><h2>{{ title }}</h2><span>{% if amounts %}元 · {% endif %}{{ rows|length }} 条</span></div>
+  {% if rows %}
+  <div class="table-scroll" tabindex="0" aria-label="{{ title }}">
+    <table>
+      <thead><tr>{% for col in rows[0] %}<th scope="col" {% if col in amounts %}class="num"{% endif %}>{{ col[:-1] if col in amounts else col }}</th>{% endfor %}</tr></thead>
+      <tbody>{% for row in rows %}<tr>{% for col in row %}
+        {% if col in amounts %}<td class="num">{{ row[col]|yuan }}</td>
+        {% elif col == '清算状态' %}<td><span class="status" data-status="{{ row[col] }}">{{ row[col] }}</span></td>
+        {% else %}<td>{{ row[col] }}</td>{% endif %}
+      {% endfor %}</tr>{% endfor %}</tbody>
+    </table>
+  </div>
+  {% else %}<p class="empty">该批次无记录。</p>{% endif %}
+</section>
+{% endmacro %}
+{% block stage %}
+{% set totals = run.get('清算汇总') or {} %}
+<div class="receipt-grid">
+  <section class="panel ticket">
+    <div class="panel-head"><h2>退租清算单</h2><button id="print" type="button">打印清算单</button></div>
+    <div class="ticket-totals"><span>应退合计 · 元</span><strong>{{ totals.get('应退合计分', 0)|yuan }}</strong></div>
+    <dl>
+    {% for row in run.get('退租清算', []) %}
+      <div><dt>{{ row['柜台'] }} <span class="status" data-status="{{ row['清算状态'] }}">{{ row['清算状态'] }}</span></dt><dd>{{ row['应退分']|yuan }}</dd></div>
+    {% else %}
+      <div><dt>本批次无撤场清算</dt><dd>—</dd></div>
+    {% endfor %}
+    </dl>
+    <div class="stamp">{{ meta['账期'] }} / 退租清算</div>
+  </section>
+  <div class="receipt-tail">
+    <section class="panel">
+      <div class="panel-head"><h2>保证金先保哪头</h2><span>扣款顺序</span></div>
+      <ol class="archive">
+        <li>旧账欠款 —— 往期月结已出账未缴清</li>
+        <li>末期租金及抽成 —— 按实际经营期折算</li>
+        <li>迟到退单预留 —— 撤场后入账且核对原单的退单</li>
+        <li>场地恢复预留</li>
+        <li>遗留售后预留</li>
+      </ol>
+      <p class="empty">已确定债务优先于预留额度；保证金不足时按序扣减，未覆盖部分记「还欠」继续追收，扣后余额与本期多缴一并退还。终止日或保证金不清的柜台列入挂起，不并入本次清算。</p>
+    </section>
+    {{ sheet('退租清算汇总', run.get('退租清算', []), ('保证金分', '应扣合计分', '实扣合计分', '还欠分', '多缴退回分', '应退分')) }}
+    {{ sheet('清算明细', run.get('清算明细', []), ('应扣分', '实扣分', '未覆盖分')) }}
+    {{ register('清算挂起', run.get('清算挂起', [])) }}
+    {% if totals %}{{ register('清算汇总', [totals]) }}{% endif %}
+  </div>
+</div>
+{% endblock %}

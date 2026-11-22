@@ -32,6 +32,8 @@ dd { margin: 0; font-family: var(--mono); font-variant-numeric: tabular-nums; te
 .status { display: inline-block; color: var(--ok); padding-inline: 4px; border: 1px solid currentColor; margin-left: 3px; }
 .status[data-status="应补"] { color: var(--bad); }
 .status[data-status="应退"], .status[data-status="缺缴款单"] { color: var(--warn); }
+.status[data-status="欠费挂账"] { color: var(--bad); }
+.status[data-status="结清无退"] { color: var(--warn); }
 .table-scroll { max-height: 280px; overflow: auto; }
 table { width: 100%; border-spacing: 0; white-space: nowrap; font-size: 12px; }
 th { position: sticky; top: 0; background: var(--surface-2); text-align: left; color: var(--muted); }

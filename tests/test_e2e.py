@@ -6,6 +6,7 @@ def test_workbench_and_independent_module_api(client):
         "tiers": "分段核算",
         "refunds": "旧期回冲",
         "reconcile": "柜台对账",
+        "exit": "退租清算",
         "publish": "运行清单",
     }
     run = client.post("/api/runs", json={"sample": "clean"}).json

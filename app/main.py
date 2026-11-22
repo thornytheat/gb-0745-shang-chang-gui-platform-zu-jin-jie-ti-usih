@@ -55,6 +55,7 @@ def create_app(config=None):
             "tiers": ("分段核算",),
             "refunds": ("旧期回冲", "退单证据"),
             "reconcile": ("柜台对账",),
+            "exit": ("退租清算", "清算明细", "清算挂起"),
             "publish": (),
         }[stage]
         return render_template(

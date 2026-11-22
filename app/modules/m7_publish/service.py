@@ -12,6 +12,7 @@ from app.modules.m5_refunds.credits import deduction_map, match_refunds
 from app.modules.m5_refunds.service import previous_period_credits
 from app.modules.m6_reconcile.service import parse_statement, reconcile, row_balance
 from app.modules.m6_reconcile.totals import summary
+from app.modules.m8_exit.service import settle_exits
 from app.reasons import issue
 
 
@@ -29,9 +30,20 @@ def calculate(raw, period):
     sales, invalid_sales = bind_sales(contracts, in_cut)
     refunds, invalid_refunds = match_refunds(in_cut, sales)
     isolated = sorted(isolated + invalid_sales + invalid_refunds, key=lambda item: item["行号"])
-    current, exceptions = calculate_period(sales, deduction_map(refunds, end), contracts, exempt, period)
+    deductions = deduction_map(refunds, end)
+    current, exceptions = calculate_period(sales, deductions, contracts, exempt, period)
     credits = previous_period_credits(sales, refunds, contracts, exempt, start, end)
     rows = reconcile(current, credits, statement)
+    exits, exit_details, exit_holds, exit_totals = settle_exits(
+        raw_data.get("exits", []),
+        contracts=contracts,
+        period=period,
+        window=(start, end),
+        reconcile_rows=rows,
+        sales=sales,
+        consumed=deductions,
+        events=events,
+    )
     balance = row_balance(len(raw_data["events"]), sales, refunds, isolated, duplicates, after_cut)
     return {
         "运行清单": manifest(run_id, parameters, round((perf_counter() - started) * 1000)),
@@ -77,6 +89,10 @@ def calculate(raw, period):
             }
             for r in refunds
         ],
+        "退租清算": exits,
+        "清算明细": exit_details,
+        "清算挂起": exit_holds,
+        "清算汇总": exit_totals,
     }
 
 

@@ -1,0 +1,149 @@
+{
+  "contracts": [
+    {
+      "shop": "101",
+      "version": "W-A",
+      "start": "2026-11-01",
+      "end": "2026-11-21",
+      "minimum": "600",
+      "tiers": [
+        [
+          null,
+          800
+        ]
+      ]
+    },
+    {
+      "shop": "102",
+      "version": "W-B",
+      "start": "2026-11-01",
+      "end": "2026-11-26",
+      "minimum": "300",
+      "tiers": [
+        [
+          null,
+          500
+        ]
+      ]
+    },
+    {
+      "shop": "103",
+      "version": "W-C",
+      "start": "2026-11-01",
+      "end": "2026-11-15",
+      "minimum": "300",
+      "tiers": [
+        [
+          null,
+          500
+        ]
+      ]
+    }
+  ],
+  "holidays": [],
+  "events": [
+    {
+      "id": "S101A",
+      "shop": "101",
+      "day": "2026-11-03",
+      "amount": "800",
+      "kind": "sale"
+    },
+    {
+      "id": "S101B",
+      "shop": "101",
+      "day": "2026-11-10",
+      "amount": "900",
+      "kind": "sale"
+    },
+    {
+      "id": "S101C",
+      "shop": "101",
+      "day": "2026-11-17",
+      "amount": "500",
+      "kind": "sale"
+    },
+    {
+      "id": "R101C",
+      "shop": "101",
+      "day": "2026-11-18",
+      "amount": "100",
+      "kind": "refund",
+      "origin": "S101C"
+    },
+    {
+      "id": "S102A",
+      "shop": "102",
+      "day": "2026-11-05",
+      "amount": "100",
+      "kind": "sale"
+    },
+    {
+      "id": "S102B",
+      "shop": "102",
+      "day": "2026-11-12",
+      "amount": "150",
+      "kind": "sale"
+    },
+    {
+      "id": "R201A",
+      "shop": "101",
+      "day": "2026-12-02",
+      "amount": "200",
+      "kind": "refund",
+      "origin": "S101A"
+    },
+    {
+      "id": "R202A",
+      "shop": "102",
+      "day": "2026-12-05",
+      "amount": "40",
+      "kind": "refund",
+      "origin": "S102A"
+    }
+  ],
+  "statement": [
+    {
+      "shop": "101",
+      "paid": "0"
+    }
+  ],
+  "exits": [
+    {
+      "shop": "101",
+      "terminated": "2026-11-21",
+      "deposit": "1000",
+      "prior": "120",
+      "restore": "150",
+      "aftercare": "80"
+    },
+    {
+      "shop": "102",
+      "terminated": "2026-11-26",
+      "deposit": "300",
+      "prior": "200",
+      "restore": "100",
+      "aftercare": "50"
+    },
+    {
+      "shop": "103",
+      "terminated": "2026-11-15",
+      "deposit": "N/A"
+    },
+    {
+      "shop": "104",
+      "terminated": "-",
+      "deposit": "500"
+    },
+    {
+      "shop": "105",
+      "terminated": "2026-11-30",
+      "deposit": "400"
+    },
+    {
+      "shop": "105",
+      "terminated": "2026-11-30",
+      "deposit": "450"
+    }
+  ]
+}
